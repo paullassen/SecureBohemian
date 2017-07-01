@@ -27,12 +27,27 @@ class S(BaseHTTPRequestHandler):
         self._set_headers()
         
     def do_POST(self):
-        # Doesn't do anything with posted data
+		print('')
 		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
 		post_data = self.rfile.read(content_length) # <--- Gets the data itself		
-		print(post_data)
+		tmp = post_data.split('&') # <--- Splits the data into kev/val pairs
+		
 		self._set_headers()
 		self.wfile.write("<html><body><h1>POST!</h1></body></html>")
+		
+		print('')
+		print(post_data)
+		print('')
+		sigDict = {}
+		for data in tmp:
+			ssid, sgstr = data.split('=') # <--- Splits the pair to reconstruct dictionary
+			sigDict[ssid] = sgstr
+		for sig in sigDict:
+			print(sig[:6]),
+			print('\t\t'),
+			print(sigDict[sig])
+		
+		#print(post_data)
         
 def run(server_class=HTTPServer, handler_class=S, port=80):
 	server_address = ('', port)
