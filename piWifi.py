@@ -4,12 +4,11 @@ import requests
 networks = Cell.all('wlan0')
 netList = sorted(networks, key=lambda x: x.signal, reverse=True)
 
-r = requests.post("http://fa4886b0.ngrok.io", data={'ssid': 'netName', 'sgstr1': '-31'})
-
+netDat = {}
 for net in netList:
     if not net.ssid == '':
-		if net.ssid == 'cafelabohemesanfrancisco' or net.ssid == 'CGNVM-18C0' or net.ssid == 'PasswordIsPassword':
-			r = requests.post("http://fa4886b0.ngrok.io", data={'ssid': net.ssid, 'sgstr': net.signal})
+		netDat[net.ssid] = net.signal
         print(net.signal),
         print('\t'),
         print(net.ssid)
+r = requests.post("http://5b4b7e6f.ngrok.io", data=netDat)
